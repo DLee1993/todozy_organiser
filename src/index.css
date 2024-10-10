@@ -4,13 +4,19 @@
     font-weight: 400;
 
     color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
+
+    --background-color: #242424;
+    --text-color: #ffffffde;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme="light"] {
+    --background-color: #ffffffde;
+    --text-color: #242424;
 }
 
 * {
@@ -20,19 +26,80 @@
 }
 
 body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
     min-width: 320px;
     min-height: 100vh;
+    background-image: url("/public/images/bg-desktop-dark.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding-top: 2rem;
+}
+
+header,
+main {
+    max-width: 38rem;
+    margin: auto;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 5rem;
+}
+
+main {
+    margin-top: 2rem;
+}
+
+h1 {
+    font-size: 30px;
+    font-weight: 500;
+}
+
+#themeToggle {
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    padding: 1px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-image: url("/public/images/icon-sun.svg");
+    background-size: cover;
+}
+
+#user-hint {
+    opacity: 0.75;
+}
+
+[data-theme="light"] {
+    body {
+        background-image: url("/public/images/bg-desktop-light.jpg");
+    }
+    #themeToggle {
+        background-image: url("/public/images/icon-moon.svg");
+    }
+}
+
+@media screen and (max-width: 850px) {
+    body {
+        background-image: url("/public/images/bg-mobile-dark.jpg");
+    }
+
+    header, main {
+        max-width: 90%;
+    }
 }
 
 @media (prefers-color-scheme: light) {
     :root {
-        color: #213547;
-        background-color: #ffffff;
-    }
-    a:hover {
-        color: #747bff;
-    }
-    button {
-        background-color: #f9f9f9;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        background-image: url("/public/images/bg-desktop-light.jpg");
+        background-repeat: no-repeat;
+        background-size: 100% auto;
     }
 }
