@@ -48,6 +48,7 @@ function App() {
     const DeleteButton = ({ data }: { data: number }) => {
         return (
             <button id="deleteButton" onClick={() => deleteTodo(data)}>
+                <span>Delete todo</span>
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                     <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -139,7 +140,9 @@ function App() {
         <>
             <header>
                 <h1>Todozy</h1>
-                <button id="themeToggle" onClick={toggleTheme}></button>
+                <button id="themeToggle" onClick={toggleTheme}>
+                    <span>theme toggle</span>
+                </button>
             </header>
             <main>
                 <form onSubmit={addTodo}>
@@ -165,6 +168,7 @@ function App() {
                             {todoList.map((todo: Todo, index: number) => (
                                 <Reorder.Item key={todo.id} value={todo} id="reOrder">
                                     <span id="checkbox">
+                                        <label htmlFor={`todo-${index}`}>todo number: {index}</label>
                                         <input
                                             id={`todo-${index}`}
                                             readOnly
