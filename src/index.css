@@ -173,7 +173,7 @@ input {
     outline: none;
     border: none;
     cursor: pointer;
-    background-image: url("/images/icon-sun.svg");
+    background-image: url("images/icon-sun.svg");
     background-size: cover;
 }
 
@@ -184,10 +184,10 @@ input {
 
 [data-theme="light"] {
     body {
-        background-image: url("/images/bg-desktop-light.jpg");
+        background-image: url("images/bg-desktop-light.jpg");
     }
     #themeToggle {
-        background-image: url("/images/icon-moon.svg");
+        background-image: url("images/icon-moon.svg");
     }
     #todoList,
     #filter,
@@ -198,7 +198,7 @@ input {
 
 @media screen and (max-width: 850px) {
     body {
-        background-image: url("/images/bg-mobile-dark.jpg");
+        background-image: url("images/bg-mobile-dark.jpg");
     }
 
     header,
@@ -211,7 +211,7 @@ input {
     :root {
         background-color: var(--background-color);
         color: var(--text-color);
-        background-image: url("/images/bg-desktop-light.jpg");
+        background-image: url("images/bg-desktop-light.jpg");
         background-repeat: no-repeat;
         background-size: 100% auto;
     }
