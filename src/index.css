@@ -101,6 +101,10 @@ input {
     border-bottom: 1px solid rgba(128, 128, 128, 0.75);
 }
 
+#reOrder:hover {
+    cursor: grab;
+}
+
 #checkbox {
     display: flex;
     justify-content: center;
@@ -185,7 +189,9 @@ input {
     #themeToggle {
         background-image: url("/images/icon-moon.svg");
     }
-    #todoList, #filter, input {
+    #todoList,
+    #filter,
+    input {
         background-color: #ffffff;
     }
 }
