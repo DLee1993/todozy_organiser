@@ -3,6 +3,7 @@ import { FormEvent, useEffect, useState } from "react";
 type Todo = {
     checked: boolean;
     content: string;
+    id: number;
 };
 
 function App() {
@@ -43,7 +44,7 @@ function App() {
         }
     }, [filter, allTodos]);
 
-    const DeleteButton = ({ item }: { item: string }) => {
+    const DeleteButton = ({ item }: { item: number }) => {
         return (
             <button id="deleteButton" onClick={() => deleteTodo(item)}>
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -86,8 +87,12 @@ function App() {
 
     function addTodo(e: FormEvent) {
         e.preventDefault();
+
         settodo("");
-        const updatedState = [...todoList, { checked: false, content: todo }];
+        const updatedState = [
+            ...todoList,
+            { checked: false, content: todo, id: todoList.length + 1 },
+        ];
 
         if (!updatedState) return;
 
@@ -97,7 +102,7 @@ function App() {
 
     function updateTodo(data: Todo) {
         const updatedTodos = todoList.map((todo: Todo) =>
-            todo.content === data.content ? { ...todo, checked: data.checked } : todo
+            todo.id === data.id ? { ...todo, checked: data.checked } : todo
         );
 
         localStorage.setItem("todo-list", JSON.stringify(updatedTodos));
@@ -111,8 +116,14 @@ function App() {
         }
     }
 
-    function deleteTodo(item: string) {
-        const updatedTodos = todoList.filter((todo: Todo) => todo.content !== item);
+    function deleteTodo(item: number) {
+        const updatedTodos = todoList.filter((todo: Todo) => todo.id !== item);
+        setTodoList(updatedTodos);
+        localStorage.setItem("todo-list", JSON.stringify(updatedTodos));
+    }
+
+    function clearCompleted() {
+        const updatedTodos = todoList.filter((todo: Todo) => todo.checked === false);
         setTodoList(updatedTodos);
         localStorage.setItem("todo-list", JSON.stringify(updatedTodos));
     }
@@ -152,12 +163,13 @@ function App() {
                                                 updateTodo({
                                                     checked: !item.checked,
                                                     content: item.content,
+                                                    id: item.id,
                                                 })
                                             }
                                         />
                                         <p>{item.content}</p>
                                     </span>
-                                    <DeleteButton item={item.content} />
+                                    <DeleteButton item={item.id} />
                                 </li>
                             ))}
                         </ul>
@@ -195,7 +207,9 @@ function App() {
                                         </button>
                                     </li>
                                 </ul>
-                                <button>Clear completed</button>
+                                {todoList.filter((item) => item.checked === true).length > 0 && (
+                                    <button onClick={clearCompleted}>Clear completed</button>
+                                )}
                             </section>
                             <p id="user-hint">Drag and drop to re-order the list</p>
                         </>
