@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
+import { Reorder } from "framer-motion";
 
 type Todo = {
     checked: boolean;
@@ -91,7 +92,7 @@ function App() {
         settodo("");
         const updatedState = [
             ...todoList,
-            { checked: false, content: todo, id: todoList.length + 1 },
+            { checked: false, content: todo, id: Math.floor(Math.random() * 1000) },
         ];
 
         if (!updatedState) return;
@@ -128,6 +129,12 @@ function App() {
         localStorage.setItem("todo-list", JSON.stringify(updatedTodos));
     }
 
+    function setReOrderList(newOrder: Todo[]) {
+        console.log(newOrder);
+        setTodoList(newOrder);
+        localStorage.setItem("todo-list", JSON.stringify(newOrder));
+    }
+
     return (
         <>
             <header>
@@ -150,9 +157,13 @@ function App() {
                 </form>
                 <section id="todoList-container">
                     <section id="todoList">
-                        <ul>
+                        <Reorder.Group
+                            values={todoList}
+                            axis="y"
+                            onReorder={(newOrder) => setReOrderList(newOrder)}
+                        >
                             {todoList.map((todo: Todo, index: number) => (
-                                <li key={index}>
+                                <Reorder.Item key={todo.id} value={todo} id="reOrder">
                                     <span id="checkbox">
                                         <input
                                             id={`todo-${index}`}
@@ -170,9 +181,9 @@ function App() {
                                         <p>{todo.content}</p>
                                     </span>
                                     <DeleteButton data={todo.id} />
-                                </li>
+                                </Reorder.Item>
                             ))}
-                        </ul>
+                        </Reorder.Group>
                     </section>
                     {todoList.length !== 0 && (
                         <>
