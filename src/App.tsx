@@ -44,9 +44,9 @@ function App() {
         }
     }, [filter, allTodos]);
 
-    const DeleteButton = ({ item }: { item: number }) => {
+    const DeleteButton = ({ data }: { data: number }) => {
         return (
-            <button id="deleteButton" onClick={() => deleteTodo(item)}>
+            <button id="deleteButton" onClick={() => deleteTodo(data)}>
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                     <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -116,8 +116,8 @@ function App() {
         }
     }
 
-    function deleteTodo(item: number) {
-        const updatedTodos = todoList.filter((todo: Todo) => todo.id !== item);
+    function deleteTodo(data: number) {
+        const updatedTodos = todoList.filter((todo: Todo) => todo.id !== data);
         setTodoList(updatedTodos);
         localStorage.setItem("todo-list", JSON.stringify(updatedTodos));
     }
@@ -151,25 +151,25 @@ function App() {
                 <section id="todoList-container">
                     <section id="todoList">
                         <ul>
-                            {todoList.map((item: Todo, index: number) => (
+                            {todoList.map((todo: Todo, index: number) => (
                                 <li key={index}>
                                     <span id="checkbox">
                                         <input
                                             id={`todo-${index}`}
                                             readOnly
                                             type="checkbox"
-                                            checked={item.checked}
+                                            checked={todo.checked}
                                             onClick={() =>
                                                 updateTodo({
-                                                    checked: !item.checked,
-                                                    content: item.content,
-                                                    id: item.id,
+                                                    checked: !todo.checked,
+                                                    content: todo.content,
+                                                    id: todo.id,
                                                 })
                                             }
                                         />
-                                        <p>{item.content}</p>
+                                        <p>{todo.content}</p>
                                     </span>
-                                    <DeleteButton item={item.id} />
+                                    <DeleteButton data={todo.id} />
                                 </li>
                             ))}
                         </ul>
