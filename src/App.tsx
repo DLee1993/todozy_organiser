@@ -4,7 +4,7 @@ import { Reorder, motion } from "framer-motion";
 type Todo = {
     checked: boolean;
     content: string;
-    id: number;
+    id: string;
 };
 
 const tickVariants = {
@@ -13,7 +13,7 @@ const tickVariants = {
         opacity: 1,
         transition: {
             duration: 0.2,
-            delay: 0.2,
+            delay: 0.1,
         },
     },
     unchecked: {
@@ -28,6 +28,7 @@ const tickVariants = {
 function App() {
     const [filter, setFilter] = useState("all");
     const [todo, settodo] = useState("");
+    const [error, setError] = useState("");
     const [todoList, setTodoList] = useState<Todo[]>([]);
     const allTodos = localStorage.getItem("todo-list");
 
@@ -63,7 +64,7 @@ function App() {
         }
     }, [filter, allTodos]);
 
-    const DeleteButton = ({ data }: { data: number }) => {
+    const DeleteButton = ({ data }: { data: string }) => {
         return (
             <button id="deleteButton" onClick={() => deleteTodo(data)}>
                 <span>Delete todo</span>
@@ -109,10 +110,20 @@ function App() {
         e.preventDefault();
 
         settodo("");
-        const updatedState = [
-            ...todoList,
-            { checked: false, content: todo, id: Math.floor(Math.random() * 1000) },
-        ];
+
+        if (todo === "") {
+            setError("Please enter something");
+
+            setTimeout(() => {
+                setError("");
+            }, 2000);
+
+            return;
+        }
+
+        const id = crypto.randomUUID();
+
+        const updatedState = [...todoList, { checked: false, content: todo, id: id }];
 
         if (!updatedState) return;
 
@@ -136,7 +147,7 @@ function App() {
         }
     }
 
-    function deleteTodo(data: number) {
+    function deleteTodo(data: string) {
         const updatedTodos = todoList.filter((todo: Todo) => todo.id !== data);
         setTodoList(updatedTodos);
         localStorage.setItem("todo-list", JSON.stringify(updatedTodos));
@@ -169,13 +180,54 @@ function App() {
                         <input
                             type="text"
                             id="todo"
-                            placeholder="Create a new todo..."
+                            className={error ? "inputError" : ""}
+                            placeholder={error ? error : "Create a new todo..."}
                             value={todo}
                             onChange={(e) => settodo(e.target.value)}
                             autoFocus
                         />
                     </fieldset>
                 </form>
+                {todoList.length > 0 && (
+                    <section id="filter">
+                        <ul>
+                            <li>
+                                <button
+                                    onClick={() => setFilter("all")}
+                                    className={filter === "all" ? "active" : ""}
+                                >
+                                    All
+                                </button>
+                            </li>
+                            <li>
+                                <button
+                                    onClick={() => setFilter("active")}
+                                    className={filter === "active" ? "active" : ""}
+                                >
+                                    Active
+                                </button>
+                            </li>
+                            <li>
+                                <button
+                                    onClick={() => setFilter("completed")}
+                                    className={filter === "completed" ? "active" : ""}
+                                >
+                                    Completed
+                                </button>
+                            </li>
+                        </ul>
+                        <button
+                            onClick={clearCompleted}
+                            disabled={
+                                todoList.filter((item) => item.checked === true).length > 0
+                                    ? false
+                                    : true
+                            }
+                        >
+                            Clear completed
+                        </button>
+                    </section>
+                )}
                 <section id="todoList-container">
                     <section id="todoList">
                         <Reorder.Group
@@ -231,45 +283,8 @@ function App() {
                             ))}
                         </Reorder.Group>
                     </section>
-                    {todoList.length !== 0 && (
-                        <>
-                            <section id="filter">
-                                <p>
-                                    {todoList.length}{" "}
-                                    <span>{todoList.length > 1 ? "items" : "item"} left</span>
-                                </p>
-                                <ul>
-                                    <li>
-                                        <button
-                                            onClick={() => setFilter("all")}
-                                            className={filter === "all" ? "active" : ""}
-                                        >
-                                            All
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button
-                                            onClick={() => setFilter("active")}
-                                            className={filter === "active" ? "active" : ""}
-                                        >
-                                            Active
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button
-                                            onClick={() => setFilter("completed")}
-                                            className={filter === "completed" ? "active" : ""}
-                                        >
-                                            Completed
-                                        </button>
-                                    </li>
-                                </ul>
-                                {todoList.filter((item) => item.checked === true).length > 0 && (
-                                    <button onClick={clearCompleted}>Clear completed</button>
-                                )}
-                            </section>
-                            <p id="user-hint">Drag and drop to re-order the list</p>
-                        </>
+                    {todoList.length > 0 && (
+                        <p id="user-hint">Drag and drop to re-order the list</p>
                     )}
                 </section>
             </main>
