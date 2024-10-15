@@ -31,10 +31,18 @@ body {
     transition: background-color 0.3s, color 0.3s;
     min-width: 320px;
     min-height: 100vh;
-    background-image: url("/dist/images/bg-desktop-dark.jpg");
-    background-repeat: no-repeat;
-    background-size: contain;
     padding-top: 2rem;
+    background: #3a6186; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+        to bottom,
+        #89253e,
+        #3a6186
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+        to bottom,
+        #89253e,
+        #3a6186
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 header,
@@ -60,6 +68,7 @@ main {
 h1 {
     font-size: 30px;
     font-weight: 500;
+    color: #fff;
 }
 
 fieldset {
@@ -84,14 +93,14 @@ label {
 input {
     width: 100%;
     height: 60px;
-    background-color: #242424;
+    background-color: var(--background-color);
     border: none;
     padding: 0px 20px;
     margin-bottom: 30px;
 }
 
 #todoList {
-    background-color: #242424;
+    background-color: var(--background-color);
 }
 
 #todoList ul li {
@@ -114,14 +123,46 @@ input {
     gap: 25px;
 }
 
-#checkbox input {
+#checkbox fieldset {
+    position: relative;
     display: block;
-    margin: 0;
     width: 20px;
     height: 20px;
-    border-radius: 20px;
-    fill: #242424;
-    border: none;
+    border-radius: 5px;
+}
+
+#checkbox input {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    display: block;
+    margin: 0;
+    border-radius: 5px;
+    fill: var(--background-color);
+    appearance: none;
+    padding: 0;
+}
+
+#checkboxSVG {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    border: 1px solid var(--text-color);
+    border-radius: 5px;
+    padding: 2px;
+}
+
+#checkboxSVG svg {
+    width: 80%;
+    stroke: var(--text-color);
 }
 
 #deleteButton {
@@ -142,7 +183,7 @@ input {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: #242424;
+    background-color: var(--background-color);
     padding: 15px 5px;
     box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.25);
 }
@@ -159,6 +200,7 @@ input {
     border: none;
     cursor: pointer;
     font-weight: 600;
+    color: var(--text-color);
 }
 
 #filter button.active {
@@ -180,27 +222,21 @@ input {
 #user-hint {
     text-align: center;
     margin-top: 25px;
+    color: #fff;
+}
+
+.strikeThrough {
+    text-decoration: line-through;
+    opacity: 0.5;
 }
 
 [data-theme="light"] {
-    body {
-        background-image: url("/dist/images/bg-desktop-light.jpg");
-    }
     #themeToggle {
         background-image: url("/dist/images/icon-moon.svg");
-    }
-    #todoList,
-    #filter,
-    input {
-        background-color: #ffffff;
     }
 }
 
 @media screen and (max-width: 850px) {
-    body {
-        background-image: url("/dist/images/bg-mobile-dark.jpg");
-    }
-
     header,
     main {
         max-width: 90%;
@@ -211,8 +247,5 @@ input {
     :root {
         background-color: var(--background-color);
         color: var(--text-color);
-        background-image: url("/dist/images/bg-desktop-light.jpg");
-        background-repeat: no-repeat;
-        background-size: 100% auto;
     }
 }

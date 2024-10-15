@@ -1,10 +1,28 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Reorder } from "framer-motion";
+import { Reorder, motion } from "framer-motion";
 
 type Todo = {
     checked: boolean;
     content: string;
     id: number;
+};
+
+const tickVariants = {
+    checked: {
+        pathLength: 1,
+        opacity: 1,
+        transition: {
+            duration: 0.2,
+            delay: 0.2,
+        },
+    },
+    unchecked: {
+        pathLength: 0,
+        opacity: 0,
+        transition: {
+            duration: 0.2,
+        },
+    },
 };
 
 function App() {
@@ -168,21 +186,45 @@ function App() {
                             {todoList.map((todo: Todo, index: number) => (
                                 <Reorder.Item key={todo.id} value={todo} id="reOrder">
                                     <span id="checkbox">
-                                        <label htmlFor={`todo-${index}`}>todo number: {index}</label>
-                                        <input
-                                            id={`todo-${index}`}
-                                            readOnly
-                                            type="checkbox"
-                                            checked={todo.checked}
-                                            onClick={() =>
-                                                updateTodo({
-                                                    checked: !todo.checked,
-                                                    content: todo.content,
-                                                    id: todo.id,
-                                                })
-                                            }
-                                        />
-                                        <p>{todo.content}</p>
+                                        <fieldset>
+                                            <label htmlFor={`todo-${index}`}>
+                                                todo number: {index}
+                                            </label>
+                                            <input
+                                                id={`todo-${index}`}
+                                                readOnly
+                                                type="checkbox"
+                                                checked={todo.checked}
+                                                onClick={() =>
+                                                    updateTodo({
+                                                        checked: !todo.checked,
+                                                        content: todo.content,
+                                                        id: todo.id,
+                                                    })
+                                                }
+                                            />
+                                            <div id="checkboxSVG">
+                                                <motion.svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth="3.5"
+                                                    stroke="currentColor"
+                                                    initial={false}
+                                                    animate={todo.checked ? "checked" : "unchecked"}
+                                                >
+                                                    <motion.path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M4.5 12.75l6 6 9-13.5"
+                                                        variants={tickVariants}
+                                                    />
+                                                </motion.svg>
+                                            </div>
+                                        </fieldset>
+                                        <p className={todo.checked ? "strikeThrough" : ""}>
+                                            {todo.content}
+                                        </p>
                                     </span>
                                     <DeleteButton data={todo.id} />
                                 </Reorder.Item>
